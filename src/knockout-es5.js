@@ -37,7 +37,7 @@
     // child object properties independently, define your own class for those child objects and put
     // a separate ko.track call into its constructor --- this gives you far more control.
     function track(obj, propertyNames) {
-        if (!obj || typeof obj !== 'object') {
+        if (!obj || typeOf(obj) !== 'object') {
             throw new Error('When calling ko.track, you must pass an object as the first parameter.');
         }
 
@@ -274,6 +274,21 @@
         if (observable) {
             observable.valueHasMutated();
         }
+    }
+
+    function typeOf(value) {
+	var s = typeof value;
+	if (s === 'object') {
+            if (value) {
+                if (value.constructor == Date)
+                    s = 'date';
+		else if (Object.prototype.toString.call(value) == '[object Array]')
+                    s = 'array';
+            } else {
+		s = 'null';
+            }
+	}
+	return s;
     }
 
     // Module initialisation
